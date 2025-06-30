@@ -1,0 +1,91 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f4f8;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+.app-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tracker-form input {
+  padding: 10px;
+  width: 60%;
+  margin-right: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.tracker-form button {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.status-progress {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  position: relative;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.step .circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.step.active .circle {
+  background: #007bff;
+  color: white;
+}
+
+.step .label {
+  font-size: 14px;
+  color: #333;
+}
+
+.history-list {
+  text-align: left;
+  margin-top: 40px;
+}
+
+.history-list h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.history-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.history-list li {
+  background: #f7f7f7;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+}
