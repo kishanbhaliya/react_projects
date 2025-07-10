@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habit Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+  <div class="max-w-2xl mx-auto p-4">
+    <h1 class="text-3xl font-bold text-center mb-6">🔥 Habit Tracker</h1>
+
+    <form id="addHabitForm" class="flex mb-4">
+      <input id="habitInput" type="text" placeholder="Enter habit name" class="flex-grow p-2 border border-gray-300 rounded-l" required>
+      <button type="submit" class="bg-green-600 text-white px-4 rounded-r">Add Habit</button>
+    </form>
+
+    <button id="sendReportBtn" class="mb-6 bg-purple-600 text-white px-4 py-2 rounded">📧 Send Weekly Report</button>
+
+    <div id="habitList"></div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8000';
+
+    async function fetchHabits() {
+      const res = await fetch(`${API}/habits`);
+      const habits = await res.json();
+      const container = document.getElementById('habitList');
+      container.innerHTML = '';
+
+      habits.forEach(habit => {
+        const card = document.createElement('div');
+        card.className = 'bg-white p-4 mb-4 shadow rounded';
+        card.innerHTML = `
+          <h2 class="text-xl font-semibold">${habit.name}</h2>
+          <p>✅ Days Done: ${habit.days_done}</p>
+          <p>🔥 Streak: ${habit.streak}</p>
+          <p>❌ Missed: ${habit.missed}</p>
+          <button class="mt-2 bg-blue-500 text-white px-3 py-1 rounded" onclick="markDone('${habit.name}')">Mark Done Today</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function addHabit(e) {
+      e.preventDefault();
+      const habit = document.getElementById('habitInput').value.trim();
+      if (!habit) return;
+      await fetch(`${API}/habits`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: habit })
+      });
+      document.getElementById('habitInput').value = '';
+      fetchHabits();
+    }
+
+    async function markDone(name) {
+      await fetch(`${API}/habits/${name}/done`, { method: 'POST' });
+      fetchHabits();
+    }
+
+    async function sendReport() {
+      const email = prompt('Enter your email address:');
+      if (!email) return;
+      await fetch(`${API}/send-report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(email)
+      });
+      alert('📧 Report sent (if email is configured)');
+    }
+
+    document.getElementById('addHabitForm').addEventListener('submit', addHabit);
+    document.getElementById('sendReportBtn').addEventListener('click', sendReport);
+
+    fetchHabits();
+  </script>
+</body>
+</html>
